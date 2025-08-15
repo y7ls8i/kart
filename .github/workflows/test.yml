@@ -1,0 +1,29 @@
+name: Go Tests with MongoDB
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Create mongo Docker container
+        uses: DigiPie/mongo-action@v2.0.1
+        with:
+          image_version: 8.0.12
+          port: 27017
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.6'
+
+      - name: Run tests
+        run: go test -race ./...
