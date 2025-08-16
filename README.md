@@ -27,6 +27,9 @@ The scripts are:
 2. `go run ./cmd/validcoupons` to find valid coupons from a list of coupons in data/coupon/ directory.
 3. `go run ./cmd/saveValidCoupons` to import valid coupons into a MongoDB collection.
 
+It took about 1 hour to run the 2nd script (see `data/coupon/valid/log.txt`), apparently there are only 8 valid
+coupons. (see `data/coupon/valid/valid`).
+
 ## Structure
 
 #### adapters
