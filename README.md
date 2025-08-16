@@ -25,7 +25,7 @@ If the collection is indexed properly, this should be fast and efficient.
 The scripts are:
 1. `go run ./cmd/dlcoupons` to download couponbase files from S3.
 2. `go run ./cmd/validcoupons` to find valid coupons from a list of coupons in data/coupon/ directory.
-3. `go run ./cmd/validcoupons` to import valid coupons into a MongoDB collection.
+3. `go run ./cmd/saveValidCoupons` to import valid coupons into a MongoDB collection.
 
 ## Structure
 
