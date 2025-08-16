@@ -32,11 +32,12 @@ coupons. (see `data/coupon/valid/valid`).
 
 ## Structure
 
-#### adapters
+#### adapter
 
-Adapters are the interfaces between the application and the external world.
-One notable adapter is DB connection. Because I am using MongoDB, therefore the adapter is called adapter/mongo.
-Adapters can have other packages, for example if I want to use Redis, I would create an adapter/redis package.
+Adapter contains the interfaces between the application and the external dependencies.
+One notable adapter is the DB connection. Because I am using MongoDB, therefore the adapter is called adapter/mongo.
+Adapters can have other packages. For example, if I want to use Redis, I would create an adapter/redis package. Or if
+I want to use Kafka, I would create an adapter/kafka package.
 
 #### business
 
@@ -46,20 +47,23 @@ to and from the adapters.
 #### server
 
 Server is responsible for setting up the HTTP server and routing.
-The server package should not have any business logic. It calls business or adapter package to get the data it needs.
-If business logic needs to be applied to the data, for example the order creation, it should be done in the business
+Server is the layer above the business and adapter.
+The server package should not have any business logic.
+It calls the business or adapter package to get the data it needs.
+If business logic needs to be applied to the data, for example, the order creation, it should be done in the business
 package.
-But if it is simple data fetching, like listing all products, it can be done directly in the adapter package.
+But if it is simple data fetching, like listing all products, it can be done directly by calling a function in the
+adapter package.
 
-#### cmd
+#### cmd/api
 
-Cmd is the entry point of the application. It is responsible for parsing command line arguments, setting up the
+`cmd/api` is the entry point of the application. It is responsible for parsing command line arguments, setting up the
 configuration, and starting the server.
 
 ## Installation
 
 It only has one dependency: MongoDB.
-I have created a docker-compose file to make it easy to set up. Obviously, you need Docker already installed.
+I have created a docker-compose file to make it easy to set up; you need Docker already installed.
 
 `docker-compose up -d`
 
