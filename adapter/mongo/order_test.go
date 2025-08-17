@@ -8,6 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	aperr "github.com/y7ls8i/kart/error"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
@@ -70,7 +71,7 @@ func TestCreateOrder(t *testing.T) {
 
 		order, err := c.CreateOrder(ctx, req)
 		require.Error(t, err)
-		assert.True(t, errors.Is(err, ErrBadRequest))
+		assert.True(t, errors.Is(err, aperr.ErrBadRequest))
 		assert.Nil(t, order)
 	})
 }

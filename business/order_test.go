@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/y7ls8i/kart/adapter/mongo"
 	"github.com/y7ls8i/kart/business"
+	aperr "github.com/y7ls8i/kart/error"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
@@ -47,7 +48,7 @@ func TestBusiness_CreateOrder(t *testing.T) {
 			mock:           &mockDB{},
 			expectedResult: nil,
 			expectedErr:    errors.New("unprocessable entity: quantity must be positive"),
-			expectedErrIs:  mongo.ErrUnprocessableEntity,
+			expectedErrIs:  aperr.ErrUnprocessableEntity,
 		},
 		{
 			name: "invalid product",
@@ -59,7 +60,7 @@ func TestBusiness_CreateOrder(t *testing.T) {
 			},
 			expectedResult: nil,
 			expectedErr:    fmt.Errorf("unprocessable entity: product ids not found: [%s]", productID.Hex()),
-			expectedErrIs:  mongo.ErrUnprocessableEntity,
+			expectedErrIs:  aperr.ErrUnprocessableEntity,
 		},
 		{
 			name: "invalid coupon",
@@ -69,11 +70,11 @@ func TestBusiness_CreateOrder(t *testing.T) {
 				findProductsProducts: []mongo.Product{{ID: productID, Name: "product1"}},
 				findProductsErr:      nil,
 				findOneCouponCoupon:  nil,
-				findOneCouponErr:     mongo.ErrNotFound,
+				findOneCouponErr:     aperr.ErrNotFound,
 			},
 			expectedResult: nil,
 			expectedErr:    fmt.Errorf(`unprocessable entity: coupon "coupon1" not found`),
-			expectedErrIs:  mongo.ErrUnprocessableEntity,
+			expectedErrIs:  aperr.ErrUnprocessableEntity,
 		},
 		{
 			name: "find products internal error",

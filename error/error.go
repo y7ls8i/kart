@@ -1,4 +1,5 @@
-package mongo
+// Package error provides sentinel errors for the application.
+package error
 
 import "errors"
 

@@ -7,20 +7,20 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/y7ls8i/kart/adapter/mongo"
+	aperr "github.com/y7ls8i/kart/error"
 )
 
 // Abort aborts the request with the appropriate error code.
 func Abort(ctx *gin.Context, err error, log string) {
-	if errors.Is(err, mongo.ErrNotFound) {
+	if errors.Is(err, aperr.ErrNotFound) {
 		_ = ctx.AbortWithError(http.StatusNotFound, err)
 		return
 	}
-	if errors.Is(err, mongo.ErrBadRequest) {
+	if errors.Is(err, aperr.ErrBadRequest) {
 		_ = ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-	if errors.Is(err, mongo.ErrUnprocessableEntity) {
+	if errors.Is(err, aperr.ErrUnprocessableEntity) {
 		_ = ctx.AbortWithError(http.StatusUnprocessableEntity, err)
 		return
 	}

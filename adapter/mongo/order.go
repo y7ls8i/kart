@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	aperr "github.com/y7ls8i/kart/error"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
@@ -39,7 +40,7 @@ func (c *Client) CreateOrder(ctx context.Context, items []ItemRequest) (*Order, 
 	for _, item := range items {
 		productID, err := bson.ObjectIDFromHex(item.ProductID)
 		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrBadRequest, err)
+			return nil, fmt.Errorf("%w: %w", aperr.ErrBadRequest, err)
 		}
 		order.Items = append(order.Items, OrderItem{
 			ProductID: productID,

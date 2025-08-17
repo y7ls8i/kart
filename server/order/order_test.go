@@ -18,6 +18,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/y7ls8i/kart/adapter/mongo"
 	"github.com/y7ls8i/kart/business"
+	aperr "github.com/y7ls8i/kart/error"
 	"github.com/y7ls8i/kart/server/order"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
@@ -74,7 +75,7 @@ func TestCreateOrder(t *testing.T) {
 			req:  map[string]any{"couponCode": "invalid"},
 			mock: &mockBusiness{
 				createOrderResult: nil,
-				createOrderErr:    fmt.Errorf("%w: coupon not found", mongo.ErrUnprocessableEntity),
+				createOrderErr:    fmt.Errorf("%w: coupon not found", aperr.ErrUnprocessableEntity),
 			},
 			expectedStatus: http.StatusUnprocessableEntity,
 			expectedBody:   "",

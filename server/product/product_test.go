@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/y7ls8i/kart/adapter/mongo"
+	aperr "github.com/y7ls8i/kart/error"
 	"github.com/y7ls8i/kart/server/product"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
@@ -126,7 +127,7 @@ func TestGetProduct(t *testing.T) {
 			idParam: "badid",
 			mock: &mockProductDB{
 				getProductResult: nil,
-				getProductErr:    fmt.Errorf("%w: something wrong", mongo.ErrBadRequest),
+				getProductErr:    fmt.Errorf("%w: something wrong", aperr.ErrBadRequest),
 			},
 			expectedStatus: http.StatusBadRequest,
 			expectedBody:   "",
@@ -137,7 +138,7 @@ func TestGetProduct(t *testing.T) {
 			idParam: productID.Hex(),
 			mock: &mockProductDB{
 				getProductResult: nil,
-				getProductErr:    fmt.Errorf("%w: something wrong", mongo.ErrNotFound),
+				getProductErr:    fmt.Errorf("%w: something wrong", aperr.ErrNotFound),
 			},
 			expectedStatus: http.StatusNotFound,
 			expectedBody:   "",

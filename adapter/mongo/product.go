@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	aperr "github.com/y7ls8i/kart/error"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
@@ -53,7 +54,7 @@ func (c *Client) ListProducts(ctx context.Context, page int) ([]Product, error) 
 func (c *Client) GetProduct(ctx context.Context, id string) (*Product, error) {
 	bsonID, err := bson.ObjectIDFromHex(id)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrBadRequest, err)
+		return nil, fmt.Errorf("%w: %w", aperr.ErrBadRequest, err)
 	}
 
 	coll := c.client.Database(c.db).Collection(CollectionNameProducts)
@@ -61,7 +62,7 @@ func (c *Client) GetProduct(ctx context.Context, id string) (*Product, error) {
 	var product Product
 	if err := coll.FindOne(ctx, bson.M{"_id": bsonID}).Decode(&product); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, fmt.Errorf("%w: %w", ErrNotFound, err)
+			return nil, fmt.Errorf("%w: %w", aperr.ErrNotFound, err)
 		}
 		return nil, fmt.Errorf("failed to get product: %w", err)
 	}
@@ -75,7 +76,7 @@ func (c *Client) FindProducts(ctx context.Context, ids []string) (missing []stri
 	for _, id := range ids {
 		bsonID, err := bson.ObjectIDFromHex(id)
 		if err != nil {
-			return nil, nil, fmt.Errorf("%w: %w", ErrBadRequest, err)
+			return nil, nil, fmt.Errorf("%w: %w", aperr.ErrBadRequest, err)
 		}
 		productIDs = append(productIDs, bsonID)
 	}

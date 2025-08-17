@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	aperr "github.com/y7ls8i/kart/error"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
@@ -31,7 +32,7 @@ func (c *Client) FindOneCoupon(ctx context.Context, code string) (result *Coupon
 	coll := c.client.Database(c.db).Collection(CollectionNameCoupons)
 	if err := coll.FindOne(ctx, map[string]string{"code": code}).Decode(result); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, ErrNotFound
+			return nil, aperr.ErrNotFound
 		}
 		return nil, fmt.Errorf("failed to get coupon: %w", err)
 	}

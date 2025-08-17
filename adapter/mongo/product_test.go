@@ -8,6 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	aperr "github.com/y7ls8i/kart/error"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
@@ -143,7 +144,7 @@ func TestGetProduct(t *testing.T) {
 		unknownID := bson.NewObjectID().Hex()
 		got, err := c.GetProduct(ctx, unknownID)
 		assert.Error(t, err)
-		assert.True(t, errors.Is(err, ErrNotFound))
+		assert.True(t, errors.Is(err, aperr.ErrNotFound))
 		assert.Nil(t, got)
 	})
 
@@ -160,7 +161,7 @@ func TestGetProduct(t *testing.T) {
 
 		got, err := c.GetProduct(ctx, "not-a-hex")
 		assert.Error(t, err)
-		assert.True(t, errors.Is(err, ErrBadRequest))
+		assert.True(t, errors.Is(err, aperr.ErrBadRequest))
 		assert.Nil(t, got)
 	})
 }
@@ -219,7 +220,7 @@ func TestFindProducts(t *testing.T) {
 
 		missing, products, err := c.FindProducts(ctx, []string{"invalid-hex"})
 		assert.Error(t, err)
-		assert.True(t, errors.Is(err, ErrBadRequest))
+		assert.True(t, errors.Is(err, aperr.ErrBadRequest))
 		assert.Nil(t, missing)
 		assert.Nil(t, products)
 	})

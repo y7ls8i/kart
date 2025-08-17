@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/y7ls8i/kart/adapter/mongo"
+	aperr "github.com/y7ls8i/kart/error"
 )
 
 // DB is the interface for the database layer that is required by the business layer.
@@ -45,7 +46,7 @@ func (b *Business) CreateOrder(ctx context.Context, req OrderRequest) (result *O
 	productIDs := make([]string, 0, len(req.Items))
 	for _, item := range req.Items {
 		if item.Quantity <= 0 {
-			return nil, fmt.Errorf("%w: quantity must be positive", mongo.ErrUnprocessableEntity)
+			return nil, fmt.Errorf("%w: quantity must be positive", aperr.ErrUnprocessableEntity)
 		}
 		productIDs = append(productIDs, item.ProductID)
 	}
@@ -56,14 +57,14 @@ func (b *Business) CreateOrder(ctx context.Context, req OrderRequest) (result *O
 		return nil, fmt.Errorf("failed to find products: %w", err)
 	}
 	if len(missing) > 0 {
-		return nil, fmt.Errorf("%w: product ids not found: %v", mongo.ErrUnprocessableEntity, missing)
+		return nil, fmt.Errorf("%w: product ids not found: %v", aperr.ErrUnprocessableEntity, missing)
 	}
 
 	// 3. check if the coupon exists
 	if req.CouponCode != "" {
 		if _, err := b.db.FindOneCoupon(ctx, req.CouponCode); err != nil {
-			if errors.Is(err, mongo.ErrNotFound) {
-				return nil, fmt.Errorf("%w: coupon %q not found", mongo.ErrUnprocessableEntity, req.CouponCode)
+			if errors.Is(err, aperr.ErrNotFound) {
+				return nil, fmt.Errorf("%w: coupon %q not found", aperr.ErrUnprocessableEntity, req.CouponCode)
 			}
 			return nil, fmt.Errorf("failed to find one coupon: %w", err)
 		}

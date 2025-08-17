@@ -9,6 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	aperr "github.com/y7ls8i/kart/error"
 )
 
 const testMongoURI = "mongodb://127.0.0.1:27017"
@@ -92,7 +93,7 @@ func TestFindOneCoupon(t *testing.T) {
 		got, err := c.FindOneCoupon(ctx, "DOES_NOT_EXIST")
 		assert.Error(t, err)
 		assert.Equal(t, "not found", err.Error())
-		assert.True(t, errors.Is(err, ErrNotFound))
+		assert.True(t, errors.Is(err, aperr.ErrNotFound))
 		assert.Nil(t, got)
 	})
 }
