@@ -7,11 +7,19 @@ import (
 	"log"
 	"os"
 
+	"github.com/alecthomas/kingpin/v2"
 	"github.com/y7ls8i/kart/adapter/mongo"
+	"github.com/y7ls8i/kart/config"
 )
 
+var configPath = kingpin.Flag("config", "Path to config file.").Short('c').ExistingFile()
+
 func main() {
-	client, err := mongo.NewClient("mongodb://127.0.0.1:27017", "kart")
+	kingpin.Parse()
+
+	conf := config.ReadConfig(*configPath)
+
+	client, err := mongo.NewClient(conf.MongoDB.URI, conf.MongoDB.DB)
 	if err != nil {
 		log.Fatalf("Error connecting to mongo: %v", err)
 	}
